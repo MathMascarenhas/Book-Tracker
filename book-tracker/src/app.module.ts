@@ -4,10 +4,16 @@ import { UserModule } from './user/user.module';
 import { BookModule } from './book/book.module';
 import { BookCollectionModule } from './book-collection/book-collection.module';
 import { GenreModule } from './genre/genre.module';
+import { DatabaseModule } from './prisma/database.module';
 
 @Module({
-  imports: [ProfileModule, UserModule, BookModule, BookCollectionModule, GenreModule],
-  controllers: [],
-  providers: [],
+  imports: [
+    ProfileModule,
+    UserModule,
+    BookModule,
+    BookCollectionModule,
+    GenreModule,
+    DatabaseModule,
+  ],
 })
 export class AppModule {}

@@ -1,11 +1,11 @@
 import { IProfile } from 'src/profile/entities/profile.entity';
 
-export interface IUser {
+export interface IUserEntity {
   id: string;
   name: string;
   email: string;
   password: string;
   cpf: string;
   isAdmin: boolean;
-  profile: IProfile[];
+  profile?: IProfile[];
 }

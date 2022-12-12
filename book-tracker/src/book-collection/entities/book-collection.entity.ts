@@ -1,7 +1,8 @@
-import { IBook } from "src/book/entities/book.entity";
+import { IBook } from 'src/book/entities/book.entity';
 
 export interface IBookCollection {
-    id: string;
-    name: string;
-    bookCollectiion: IBook[];
+  id: string;
+  profileId: string;
+  name: string;
+  bookCollectiion: IBook[];
 }

@@ -1,3 +1,4 @@
 export class CreateBookCollectionDto {
-    name: string;
+  name: string;
+  profileId: string;
 }
