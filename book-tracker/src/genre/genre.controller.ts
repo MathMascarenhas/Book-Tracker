@@ -10,33 +10,56 @@ import {
 import { GenreService } from './genre.service';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
+import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 
 @Controller('genre')
 export class GenreController {
   constructor(private readonly genreService: GenreService) {}
 
   @Post()
-  create(@Body() createGenreDto: CreateGenreDto) {
-    return this.genreService.create(createGenreDto);
+  async create(@Body() createGenreDto: CreateGenreDto) {
+    try {
+	return await this.genreService.create(createGenreDto);
+} catch (error) {
+	HandleException(error)
+}
   }
 
   @Get()
-  findAll() {
-    return this.genreService.findAll();
+  async findAll() {
+  try {
+	  return await this.genreService.findAll();
+} catch (error) {
+	HandleException(error)
+}
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.genreService.findOne(id);
+  async findOne(@Param('id') genreId: string) {
+    try {
+	return await this.genreService.findOne(genreId);
+} catch (error) {
+	HandleException(error)
+}
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGenreDto: UpdateGenreDto) {
-    return this.genreService.update(id, updateGenreDto);
+  async update(@Param('id') genreId: string, @Body() updateGenreDto: UpdateGenreDto) {
+    try {
+	const updateData = {...updateGenreDto, id: genreId}
+	    return await this.genreService.update(updateData);
+} catch (error) {
+	 HandleException(error)
+}
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.genreService.remove(id);
+  async remove(@Param('id') genreId: string): Promise<string> {
+  try {
+	  await this.genreService.remove(genreId);
+    return "Genre deleted successfully"
+} catch (error) {
+	HandleException(error)
+}
   }
 }

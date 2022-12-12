@@ -1,26 +1,40 @@
 import { Injectable } from '@nestjs/common';
+import { Exception } from 'src/utils/exceptions/exception';
+import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
+import { IGenre } from './entities/genre.entity';
+import { GenreRepository } from './genre.repository';
 
 @Injectable()
 export class GenreService {
-  create(createGenreDto: CreateGenreDto) {
-    return 'This action adds a new genre';
+  constructor(private readonly genreRepository: GenreRepository) {}
+
+  async create(createGenreDto: CreateGenreDto): Promise<IGenre> {
+    return await this.genreRepository.createGenre(createGenreDto)
   }
 
-  findAll() {
-    return `This action returns all genre`;
+  async findAll(): Promise<IGenre[]> {
+    return await this.genreRepository.findAllGenres();
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} genre`;
+  async findOne(genreId: string): Promise<IGenre> {
+    return this.genreRepository.findGenreById(genreId);
   }
 
-  update(id: string, updateGenreDto: UpdateGenreDto) {
-    return `This action updates a #${id} genre`;
+  async update(updateData: UpdateGenreDto): Promise<IGenre> {
+    return await this.genreRepository.updateGenre(updateData);
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} genre`;
+  async remove(genreId: string): Promise<boolean> {
+	const genreDeleted = await this.genreRepository.deleteGenre(genreId);
+  if (genreDeleted){
+    return true
+  } else {
+    throw new Exception(
+      Exceptions.InvalidData,
+      'Genre not found in the database',
+    );
   }
+}
 }

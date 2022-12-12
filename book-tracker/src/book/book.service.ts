@@ -33,7 +33,7 @@ export class BookService {
     } else {
       throw new Exception(
         Exceptions.InvalidData,
-        'User not found in the database',
+        'Book not found in the database',
       );
     }
   }
