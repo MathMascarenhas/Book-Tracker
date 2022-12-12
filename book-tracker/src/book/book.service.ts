@@ -1,26 +1,40 @@
 import { Injectable } from '@nestjs/common';
+import { Exception } from 'src/utils/exceptions/exception';
+import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
+import { BookRepository } from './book.repository';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { IBook } from './entities/book.entity';
 
 @Injectable()
 export class BookService {
-  create(createBookDto: CreateBookDto) {
-    return 'This action adds a new book';
+  constructor(private readonly bookRepository: BookRepository) {}
+
+  async create(createBookDto: CreateBookDto): Promise<IBook> {
+    return await this.bookRepository.createBook(createBookDto);
   }
 
-  findAll() {
-    return `This action returns all book`;
+  async findAll(): Promise<IBook[]> {
+    return await this.bookRepository.findAllBooks();
   }
 
-  findOne(id: string) {
-    return;
+  async findOne(bookId: string): Promise<IBook> {
+    return await this.bookRepository.findBookById(bookId);
   }
 
-  update(id: string, updateBookDto: UpdateBookDto) {
-    return;
+  async update(updateBookDto: UpdateBookDto): Promise<IBook> {
+    return await this.bookRepository.updateBook(updateBookDto);
   }
 
-  remove(id: string) {
-    return;
+  async remove(bookId: string): Promise<boolean> {
+    const bookDeleted = await this.bookRepository.deleteBook(bookId);
+    if (bookDeleted) {
+      return true;
+    } else {
+      throw new Exception(
+        Exceptions.InvalidData,
+        'User not found in the database',
+      );
+    }
   }
 }

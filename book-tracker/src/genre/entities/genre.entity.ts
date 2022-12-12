@@ -1,6 +1,6 @@
 import { IBook } from 'src/book/entities/book.entity';
 
-export class Genre {
+export class IGenre {
   id: string;
   name: string;
   books: IBook[];
