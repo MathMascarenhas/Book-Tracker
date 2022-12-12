@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { Exception } from 'src/utils/exceptions/exception';
+import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserEntity } from './entities/user.entity';
@@ -33,11 +35,14 @@ export class UserService {
   }
 
   async remove(userId: string): Promise<boolean> {
-    try {
-      await this.userRepository.deleteUser(userId);
+    const deletedUser = await this.userRepository.deleteUser(userId);
+    if (deletedUser) {
       return true;
-    } catch (error) {
-      return false;
+    } else {
+      throw new Exception(
+        Exceptions.InvalidData,
+        'User not found in the database',
+      );
     }
   }
 }

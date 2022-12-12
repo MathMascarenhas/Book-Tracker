@@ -1,26 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { IProfile } from './entities/profile.entity';
+import { ProfileRepository } from './profile.repository';
 
 @Injectable()
 export class ProfileService {
-  create(createProfileDto: CreateProfileDto) {
-    return 'This action adds a new profile';
+  constructor(private readonly profileRepository: ProfileRepository) {}
+
+  async createProfile(createProfileDto: CreateProfileDto): Promise<IProfile> {
+    return await this.profileRepository.createProfile(createProfileDto);
   }
 
-  findAll() {
-    return `This action returns all profile`;
+  async findAllProfiles(): Promise<IProfile[]> {
+    return await this.profileRepository.findAllProfiles();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} profile`;
+  async findOneProfile(profileId: string): Promise<IProfile> {
+    return await this.profileRepository.findProfileById(profileId);
   }
 
-  update(id: number, updateProfileDto: UpdateProfileDto) {
-    return `This action updates a #${id} profile`;
+  async updateProfile(updateProfileDto: UpdateProfileDto): Promise<IProfile> {
+    return await this.profileRepository.updateProfile(updateProfileDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} profile`;
+  async removeProfile(profileId: string): Promise<string> {
+    await this.profileRepository.deleteProfile(profileId);
+    return 'Profile deleted successufully';
   }
 }

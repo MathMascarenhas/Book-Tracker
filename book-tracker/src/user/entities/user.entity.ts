@@ -7,5 +7,5 @@ export interface IUserEntity {
   password: string;
   cpf: string;
   isAdmin: boolean;
-  profile?: IProfile[];
+  profiles: IProfile[];
 }

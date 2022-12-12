@@ -5,5 +5,5 @@ export interface IProfile {
   userId: string;
   username: string;
   imageUrl: string;
-  bookCollections: IBookCollection[];
+  bookCollections?: IBookCollection[];
 }

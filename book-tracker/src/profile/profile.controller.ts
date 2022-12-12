@@ -10,33 +10,59 @@ import {
 import { ProfileService } from './profile.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 
 @Controller('profile')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
   @Post()
-  create(@Body() createProfileDto: CreateProfileDto) {
-    return this.profileService.create(createProfileDto);
+  async create(@Body() createProfileDto: CreateProfileDto) {
+    try {
+      return await this.profileService.createProfile(createProfileDto);
+    } catch (error) {
+      HandleException(error);
+    }
   }
 
   @Get()
-  findAll() {
-    return this.profileService.findAll();
+  async findAll() {
+    try {
+      return await this.profileService.findAllProfiles();
+    } catch (error) {
+      HandleException(error);
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.profileService.findOne(+id);
+  async findOne(@Param('id') profileId: string) {
+    try {
+      return await this.profileService.findOneProfile(profileId);
+    } catch (error) {
+      HandleException(error);
+    }
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProfileDto: UpdateProfileDto) {
-    return this.profileService.update(+id, updateProfileDto);
+  async update(
+    @Param('id') profileId: string,
+    @Body() updateProfileDto: UpdateProfileDto,
+  ) {
+    try {
+      const profileUpdate = { ...updateProfileDto, id: profileId };
+
+      return await this.profileService.updateProfile(profileUpdate);
+    } catch (error) {
+      HandleException(error);
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.profileService.remove(+id);
+  async remove(@Param('id') profileId: string) {
+    try {
+      return await this.profileService.removeProfile(profileId);
+    } catch (error) {
+      HandleException(error);
+    }
   }
 }

@@ -1,26 +1,46 @@
 import { Injectable } from '@nestjs/common';
+import { Exception } from 'src/utils/exceptions/exception';
+import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
+import { BookCollectionRepository } from './book-collection.repository';
 import { CreateBookCollectionDto } from './dto/create-book-collection.dto';
 import { UpdateBookCollectionDto } from './dto/update-book-collection.dto';
+import { IBookCollection } from './entities/book-collection.entity';
 
 @Injectable()
 export class BookCollectionService {
-  create(createBookCollectionDto: CreateBookCollectionDto) {
-    return 'This action adds a new bookCollection';
+  constructor(private readonly bookCollection: BookCollectionRepository) {}
+
+  async create(
+    createBookCollectionDto: CreateBookCollectionDto,
+  ): Promise<IBookCollection> {
+    return await this.bookCollection.createCollection(createBookCollectionDto);
   }
 
-  findAll() {
-    return `This action returns all bookCollection`;
+  async findAll(): Promise<IBookCollection[]> {
+    return await this.bookCollection.findAllCollection();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} bookCollection`;
+  async findOne(collectionId: string): Promise<IBookCollection> {
+    return await this.bookCollection.findCollectionById(collectionId);
   }
 
-  update(id: number, updateBookCollectionDto: UpdateBookCollectionDto) {
-    return `This action updates a #${id} bookCollection`;
+  async update(
+    updateBookCollectionDto: UpdateBookCollectionDto,
+  ): Promise<IBookCollection> {
+    return await this.bookCollection.updateCollection(updateBookCollectionDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} bookCollection`;
+  async remove(collectionId: string): Promise<boolean> {
+    const deletedCollection = await this.bookCollection.deleteCollection(
+      collectionId,
+    );
+    if (deletedCollection) {
+      return true;
+    } else {
+      throw new Exception(
+        Exceptions.InvalidData,
+        'User not found in the database',
+      );
+    }
   }
 }
