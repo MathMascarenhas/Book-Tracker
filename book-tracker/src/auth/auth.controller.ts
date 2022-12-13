@@ -1,12 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { UseGuards } from '@nestjs/common/decorators';
-import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { IUserEntity } from 'src/user/entities/user.entity';
+import { Body, Controller, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { AuthService } from './auth.service';
-import { IsAdminAuthorization } from './decorators/is-admin.decorator';
-import { userLogged } from './decorators/user-logged.decorator';
 import { UserLoginDto } from './dto/user-login.dto';
 
 @Controller('auth')
@@ -23,10 +18,4 @@ export class AuthController {
     }
   }
 
-  @Get()
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
-  @ApiBearerAuth()
-  async getUser(@userLogged() user: IUserEntity) {
-    return user;
-  }
 }
