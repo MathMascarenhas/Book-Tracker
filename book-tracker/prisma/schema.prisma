@@ -25,7 +25,7 @@ model Profile {
   id String @id@default(uuid())
   user User @relation(fields: [userId], references: [id], name: "user_profiles", onDelete: Cascade)
   userId  String
-  username String @unique
+  username String 
   imageUrl  String
   bookCollections BookCollection[]@relation(name: "profile_collections")
 
@@ -37,7 +37,7 @@ model BookCollection {
   id String @id@default(uuid())
   profile Profile @relation(fields: [profileId], references: [id], name: "profile_collections", onDelete: Cascade)
   profileId  String
-  name String @unique
+  name String 
   books Book[]
 
   @@map("book_collection")

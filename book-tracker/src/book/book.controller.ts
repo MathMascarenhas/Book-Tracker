@@ -6,16 +6,23 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { IsAdminAuthorization } from 'src/auth/decorators/is-admin.decorator';
 import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 
 @Controller('book')
+@ApiTags('Book')
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Post()
   async create(@Body() createBookDto: CreateBookDto) {
     try {
@@ -25,6 +32,8 @@ export class BookController {
     }
   }
 
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Get()
   async findAll() {
     try {
@@ -34,6 +43,8 @@ export class BookController {
     }
   }
 
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Get(':id')
   async findOne(@Param('id') bookId: string) {
     try {
@@ -43,6 +54,8 @@ export class BookController {
     }
   }
 
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Patch(':id')
   async update(
     @Param('id') bookId: string,
@@ -56,6 +69,8 @@ export class BookController {
     }
   }
 
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Delete(':id')
   async remove(@Param('id') bookId: string) {
     try {

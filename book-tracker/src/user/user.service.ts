@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserEntity } from './entities/user.entity';
 import { UserRepository } from './user.repository';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -12,7 +13,11 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto): Promise<IUserEntity> {
     const user = createUserDto;
+    const hashedPassword = await hash(user.password, 10);
+    user.password = hashedPassword;
+
     const createdUser = await this.userRepository.createUser(user);
+    delete createdUser.password;
     return createdUser;
   }
 
@@ -28,7 +33,16 @@ export class UserService {
     return foundUser;
   }
 
+  async findUserByEmail(userEmail: string): Promise<IUserEntity> {
+    const user = await this.userRepository.findUserByEmail(userEmail);
+    return user;
+  }
+
   async update(updateUserDto: UpdateUserDto): Promise<IUserEntity> {
+    if (updateUserDto.password) {
+      const hashedPassword = await hash(updateUserDto.password, 10);
+      updateUserDto.password = hashedPassword;
+    }
     const updatedUser = await this.userRepository.updateUser(updateUserDto);
     delete updatedUser.password;
     return updatedUser;

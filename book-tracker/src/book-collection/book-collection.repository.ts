@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Exception } from 'src/utils/exceptions/exception';
 import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
+import { AddBookToCollection } from './dto/add-book.dto';
 import { CreateBookCollectionDto } from './dto/create-book-collection.dto';
 import { UpdateBookCollectionDto } from './dto/update-book-collection.dto';
 import { IBookCollection } from './entities/book-collection.entity';
@@ -62,6 +63,25 @@ export class BookCollectionRepository {
       const updatedCollection = await this.prisma.bookCollection.update({
         where: { id: collectionData.id },
         data: collectionData,
+        include: { books: true },
+      });
+      return updatedCollection;
+    } catch (error) {
+      throw new Exception(Exceptions.DatabaseException);
+    }
+  }
+
+  async addBookCollection(
+    updateData: AddBookToCollection,
+  ): Promise<IBookCollection> {
+    try {
+      const updatedCollection = await this.prisma.bookCollection.update({
+        where: { id: updateData.collectionId },
+        data: {
+          books: {
+            connect: { id: updateData.bookId },
+          },
+        },
         include: { books: true },
       });
       return updatedCollection;

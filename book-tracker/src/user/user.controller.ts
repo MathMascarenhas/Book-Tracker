@@ -7,13 +7,18 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common/decorators';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserEntity } from './entities/user.entity';
 import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { IsAdminAuthorization } from 'src/auth/decorators/is-admin.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
+@ApiTags('User')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -26,6 +31,8 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Get()
   async findAll(): Promise<IUserEntity[]> {
     try {
@@ -35,6 +42,8 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @ApiBearerAuth()
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<IUserEntity> {
     try {
@@ -44,6 +53,8 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Patch(':id')
   async update(
     @Param('id') userId: string,
@@ -57,6 +68,8 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Delete(':id')
   async remove(@Param('id') userId: string): Promise<string> {
     try {

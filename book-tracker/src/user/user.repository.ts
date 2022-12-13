@@ -20,7 +20,7 @@ export class UserRepository {
     } catch (error) {
       throw new Exception(
         Exceptions.DatabaseException,
-        'this cpf or email already exists in the database',
+        'This cpf or email already exists in the database',
       );
     }
   }
@@ -48,6 +48,18 @@ export class UserRepository {
         Exceptions.DatabaseException,
         'User could not be found in the database',
       );
+    }
+  }
+
+  async findUserByEmail(userEmail: string): Promise<IUserEntity> {
+    try {
+      const foundUser = await this.prisma.user.findUniqueOrThrow({
+        where: { email: userEmail },
+        include: { profiles: true },
+      });
+      return foundUser;
+    } catch (error) {
+      throw new Exception(Exceptions.DatabaseException, 'User not found');
     }
   }
 

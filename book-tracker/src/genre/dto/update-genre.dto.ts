@@ -1,4 +1,4 @@
 export class UpdateGenreDto {
-  id: string
+  id: string;
   name: string;
 }

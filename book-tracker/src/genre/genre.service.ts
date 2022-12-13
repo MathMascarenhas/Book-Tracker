@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Exception } from 'src/utils/exceptions/exception';
 import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
+import { AddBookToGenre } from './dto/add-book-to-genre.dto';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { IGenre } from './entities/genre.entity';
@@ -11,7 +12,11 @@ export class GenreService {
   constructor(private readonly genreRepository: GenreRepository) {}
 
   async create(createGenreDto: CreateGenreDto): Promise<IGenre> {
-    return await this.genreRepository.createGenre(createGenreDto)
+    return await this.genreRepository.createGenre(createGenreDto);
+  }
+
+  async addBook(updateBookGenre: AddBookToGenre): Promise<IGenre> {
+    return await this.genreRepository.addBookGenre(updateBookGenre);
   }
 
   async findAll(): Promise<IGenre[]> {
@@ -27,14 +32,14 @@ export class GenreService {
   }
 
   async remove(genreId: string): Promise<boolean> {
-	const genreDeleted = await this.genreRepository.deleteGenre(genreId);
-  if (genreDeleted){
-    return true
-  } else {
-    throw new Exception(
-      Exceptions.InvalidData,
-      'Genre not found in the database',
-    );
+    const genreDeleted = await this.genreRepository.deleteGenre(genreId);
+    if (genreDeleted) {
+      return true;
+    } else {
+      throw new Exception(
+        Exceptions.InvalidData,
+        'Genre not found in the database',
+      );
+    }
   }
-}
 }

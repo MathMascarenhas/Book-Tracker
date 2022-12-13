@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Exception } from 'src/utils/exceptions/exception';
 import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
+import { AddBookToGenre } from './dto/add-book-to-genre.dto';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { IGenre } from './entities/genre.entity';
@@ -12,7 +13,10 @@ export class GenreRepository {
 
   async createGenre(createGenre: CreateGenreDto): Promise<IGenre> {
     try {
-      const createdGenre = await this.prisma.genre.create({data: createGenre, include: {books: true}});
+      const createdGenre = await this.prisma.genre.create({
+        data: createGenre,
+        include: { books: true },
+      });
       return createdGenre;
     } catch (error) {
       throw new Exception(
@@ -61,10 +65,28 @@ export class GenreRepository {
     }
   }
 
+  async addBookGenre(updateData: AddBookToGenre): Promise<IGenre> {
+    try {
+      const updatedGenre = await this.prisma.genre.update({
+        where: { id: updateData.genreId },
+        data: {
+          books: {
+            connect: { id: updateData.bookId },
+          },
+        },
+        include: { books: true },
+      });
+      return updatedGenre;
+    } catch (error) {
+      console.log(error);
+      throw new Exception(Exceptions.DatabaseException);
+    }
+  }
+
   async deleteGenre(genreId: string): Promise<IGenre> {
     try {
       const deletedGenre = await this.prisma.genre.delete({
-        where: { id: genreId }
+        where: { id: genreId },
       });
       return deletedGenre;
     } catch (error) {

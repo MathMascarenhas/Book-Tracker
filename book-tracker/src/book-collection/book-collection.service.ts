@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Exception } from 'src/utils/exceptions/exception';
 import { Exceptions } from 'src/utils/exceptions/exceptionsHelper';
 import { BookCollectionRepository } from './book-collection.repository';
+import { AddBookToCollection } from './dto/add-book.dto';
 import { CreateBookCollectionDto } from './dto/create-book-collection.dto';
 import { UpdateBookCollectionDto } from './dto/update-book-collection.dto';
 import { IBookCollection } from './entities/book-collection.entity';
@@ -28,6 +29,12 @@ export class BookCollectionService {
     updateBookCollectionDto: UpdateBookCollectionDto,
   ): Promise<IBookCollection> {
     return await this.bookCollection.updateCollection(updateBookCollectionDto);
+  }
+
+  async addBook(
+    updateBookCollectionDto: AddBookToCollection,
+  ): Promise<IBookCollection> {
+    return await this.bookCollection.addBookCollection(updateBookCollectionDto);
   }
 
   async remove(collectionId: string): Promise<boolean> {
