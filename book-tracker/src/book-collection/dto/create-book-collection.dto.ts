@@ -9,5 +9,5 @@ export class CreateBookCollectionDto {
 
   @ApiProperty()
   @IsString()
-  profileId: string;
+  userId: string;
 }

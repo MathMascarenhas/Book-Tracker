@@ -13,30 +13,20 @@ model User {
   email String @unique
   password String
   cpf String @unique
-  isAdmin Boolean @map("is_admin")
-  profiles Profile[] @relation(name: "user_profiles")
+  isPremium Boolean @map("is_premium")
+  books Book[] @relation(name: "user_books")
+  notes Note[] @relation(name: "user_notes")
+  bookCollections BookCollection[] @relation(name: "user_collections")
   createdAt DateTime @default(now())@map("created_at")
   updatedAt DateTime @updatedAt@map("updated_at")
 
   @@map("user")
 }
 
-model Profile {
-  id String @id@default(uuid())
-  user User @relation(fields: [userId], references: [id], name: "user_profiles", onDelete: Cascade)
-  userId  String
-  username String 
-  imageUrl  String
-  bookCollections BookCollection[]@relation(name: "profile_collections")
-
-
-  @@map("profile")
-}
-
 model BookCollection {
   id String @id@default(uuid())
-  profile Profile @relation(fields: [profileId], references: [id], name: "profile_collections", onDelete: Cascade)
-  profileId  String
+  user User @relation(fields: [userId], references: [id], name: "user_collections", onDelete: Cascade)
+  userId  String
   name String 
   books Book[]
 
@@ -45,13 +35,14 @@ model BookCollection {
 
 model Book {
   id String @id@default(uuid())
+  user User @relation(fields: [userId], references: [id], name: "user_books", onDelete: Cascade)
+  userId  String
   title String @unique
   description String
   author String
   pages Int
   rate Decimal
   price Decimal
-  genres Genre[]
   bookCollections BookCollection[]
   createdAt DateTime @default(now())@map("created_at")
   updatedAt DateTime @updatedAt@map("updated_at")
@@ -59,11 +50,13 @@ model Book {
   @@map("book")
 }
 
-model Genre {
-  id String @id@default(uuid())
-  name String @unique
-  books Book[]
+model Note {
+  id String  @id@default(uuid())
+  user User @relation(fields: [userId], references: [id], name: "user_notes", onDelete: Cascade)
+  userId  String
+  body String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@map("genre")
+  @@map("note")
 }
-

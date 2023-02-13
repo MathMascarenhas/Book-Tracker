@@ -17,5 +17,4 @@ export class AuthController {
       HandleException(error);
     }
   }
-
 }

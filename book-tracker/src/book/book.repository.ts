@@ -22,10 +22,10 @@ export class BookRepository {
     }
   }
 
-  async findAllBooks(): Promise<IBook[]> {
+  async findAllBooks(userId: string): Promise<IBook[]> {
     try {
       const findAllBooks = await this.prisma.book.findMany({
-        include: { genres: true },
+        where: { userId: userId },
       });
       return findAllBooks;
     } catch (error) {
@@ -37,7 +37,6 @@ export class BookRepository {
     try {
       const foundBook = await this.prisma.book.findFirstOrThrow({
         where: { id: bookId },
-        include: { genres: true },
       });
       return foundBook;
     } catch (error) {
@@ -53,7 +52,6 @@ export class BookRepository {
       const updatedBook = await this.prisma.book.update({
         where: { id: updateData.id },
         data: updateData,
-        include: { genres: true },
       });
       return updatedBook;
     } catch (error) {
@@ -65,7 +63,6 @@ export class BookRepository {
     try {
       const deletedBook = await this.prisma.book.delete({
         where: { id: bookId },
-        include: { genres: true },
       });
       return deletedBook;
     } catch (error) {

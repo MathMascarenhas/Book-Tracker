@@ -17,8 +17,8 @@ export class BookCollectionService {
     return await this.bookCollection.createCollection(createBookCollectionDto);
   }
 
-  async findAll(): Promise<IBookCollection[]> {
-    return await this.bookCollection.findAllCollection();
+  async findAll(userId: string): Promise<IBookCollection[]> {
+    return await this.bookCollection.findAllCollection(userId);
   }
 
   async findOne(collectionId: string): Promise<IBookCollection> {

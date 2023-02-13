@@ -57,9 +57,9 @@ export class BookCollectionController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Get()
-  async findAll(): Promise<IBookCollection[]> {
+  async findAll(@Body() userId: string): Promise<IBookCollection[]> {
     try {
-      return await this.bookCollectionService.findAll();
+      return await this.bookCollectionService.findAll(userId);
     } catch (error) {
       HandleException(error);
     }

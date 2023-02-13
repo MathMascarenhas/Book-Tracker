@@ -35,9 +35,9 @@ export class BookController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Get()
-  async findAll() {
+  async findAll(@Body() userId: string) {
     try {
-      return await this.bookService.findAll();
+      return await this.bookService.findAll(userId);
     } catch (error) {
       HandleException(error);
     }

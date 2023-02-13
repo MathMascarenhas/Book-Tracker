@@ -14,7 +14,6 @@ export class UserRepository {
     try {
       const CreatedUser = await this.prisma.user.create({
         data: user,
-        include: { profiles: true },
       });
       return CreatedUser;
     } catch (error) {
@@ -27,9 +26,7 @@ export class UserRepository {
 
   async findAllUsers(): Promise<IUserEntity[]> {
     try {
-      const allUsers = await this.prisma.user.findMany({
-        include: { profiles: true },
-      });
+      const allUsers = await this.prisma.user.findMany();
       return allUsers;
     } catch (error) {
       throw new Exception(Exceptions.DatabaseException);
@@ -40,7 +37,6 @@ export class UserRepository {
     try {
       const foundUser = await this.prisma.user.findFirstOrThrow({
         where: { id: userId },
-        include: { profiles: true },
       });
       return foundUser;
     } catch (error) {
@@ -55,7 +51,6 @@ export class UserRepository {
     try {
       const foundUser = await this.prisma.user.findUniqueOrThrow({
         where: { email: userEmail },
-        include: { profiles: true },
       });
       return foundUser;
     } catch (error) {
@@ -68,7 +63,6 @@ export class UserRepository {
       const updatedUser = await this.prisma.user.update({
         where: { id: userData.id },
         data: userData,
-        include: { profiles: true },
       });
       return updatedUser;
     } catch (error) {
@@ -80,7 +74,6 @@ export class UserRepository {
     try {
       const deletedUser = await this.prisma.user.delete({
         where: { id: userId },
-        include: { profiles: true },
       });
       return deletedUser;
     } catch (err) {

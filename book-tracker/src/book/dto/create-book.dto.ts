@@ -27,4 +27,8 @@ export class CreateBookDto {
   @ApiProperty()
   @IsNumber()
   price: number;
+
+  @ApiProperty()
+  @IsString()
+  userId: string;
 }

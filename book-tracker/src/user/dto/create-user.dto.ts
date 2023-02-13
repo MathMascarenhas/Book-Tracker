@@ -20,7 +20,7 @@ export class CreateUserDto {
   @ApiProperty()
   cpf: string;
 
-  @IsBoolean({ message: 'IsAdmin should be a boolean' })
+  @IsBoolean({ message: 'isPremium should be a boolean' })
   @ApiProperty()
-  isAdmin: boolean;
+  isPremium: boolean;
 }

@@ -28,9 +28,10 @@ export class BookCollectionRepository {
     }
   }
 
-  async findAllCollection(): Promise<IBookCollection[]> {
+  async findAllCollection(userId: string): Promise<IBookCollection[]> {
     try {
       const allCollections = await this.prisma.bookCollection.findMany({
+        where: { userId: userId },
         include: { books: true },
       });
       return allCollections;
