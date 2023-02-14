@@ -25,7 +25,7 @@ export class BookController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Post()
-  async create(@Body() createBookDto: Omit<CreateBookDto,"userId">,
+  async create(@Body() createBookDto: CreateBookDto,
   @userLogged() userLogged: IUserEntity) {
     try {
       return await this.bookService.create({...createBookDto, userId: userLogged.id});

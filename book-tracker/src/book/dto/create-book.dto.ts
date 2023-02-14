@@ -30,5 +30,5 @@ export class CreateBookDto {
 
   @ApiProperty()
   @IsString()
-  userId: string;
+  userId?: string;
 }
