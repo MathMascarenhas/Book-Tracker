@@ -11,10 +11,12 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { IsAdminAuthorization } from 'src/auth/decorators/is-admin.decorator';
+import { IUserEntity } from 'src/user/entities/user.entity';
 import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { userLogged } from 'src/auth/decorators/user-logged.decorator';
 
 @Controller('book')
 @ApiTags('Book')
@@ -35,9 +37,9 @@ export class BookController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Get()
-  async findAll(@Body() userId: string) {
+  async findAll(@userLogged() userLogged: IUserEntity) {
     try {
-      return await this.bookService.findAll(userId);
+      return await this.bookService.findAll(userLogged.id);
     } catch (error) {
       HandleException(error);
     }

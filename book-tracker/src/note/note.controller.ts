@@ -16,6 +16,8 @@ import { CreateNoteDto } from './dto/create-note-dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { INote } from './entities/note.entity';
 import { NoteService } from './note.service';
+import { userLogged } from 'src/auth/decorators/user-logged.decorator';
+import { IUserEntity } from 'src/user/entities/user.entity';
 
 @ApiTags('Notes')
 @Controller('notes')
@@ -25,8 +27,8 @@ export class NoteController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Get()
-  async getNotes(userId: string): Promise<INote[]> {
-    return await this.service.getNotes(userId);
+  async getNotes(@userLogged() userLogged: IUserEntity): Promise<INote[]> {
+    return await this.service.getNotes(userLogged.id);
   }
 
   @UseGuards(AuthGuard())

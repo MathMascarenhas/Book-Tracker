@@ -17,6 +17,8 @@ import { AddBookToCollection } from './dto/add-book.dto';
 import { CreateBookCollectionDto } from './dto/create-book-collection.dto';
 import { UpdateBookCollectionDto } from './dto/update-book-collection.dto';
 import { IBookCollection } from './entities/book-collection.entity';
+import { userLogged } from 'src/auth/decorators/user-logged.decorator';
+import { IUserEntity } from 'src/user/entities/user.entity';
 
 @Controller('book-collection')
 @ApiTags('Book Collection')
@@ -57,9 +59,9 @@ export class BookCollectionController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Get()
-  async findAll(@Body() userId: string): Promise<IBookCollection[]> {
+  async findAll(@userLogged() userLogged: IUserEntity): Promise<IBookCollection[]> {
     try {
-      return await this.bookCollectionService.findAll(userId);
+      return await this.bookCollectionService.findAll(userLogged.id);
     } catch (error) {
       HandleException(error);
     }
