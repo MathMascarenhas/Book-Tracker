@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { IsAdminAuthorization } from 'src/auth/decorators/is-admin.decorator';
 import { IUserEntity } from 'src/user/entities/user.entity';
 import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { BookService } from './book.service';

@@ -14,7 +14,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserEntity } from './entities/user.entity';
 import { HandleException } from 'src/utils/exceptions/exceptionsHelper';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { IsAdminAuthorization } from 'src/auth/decorators/is-admin.decorator';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
