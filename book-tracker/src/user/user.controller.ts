@@ -31,7 +31,7 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Get()
   async findAll(): Promise<IUserEntity[]> {
@@ -42,7 +42,7 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<IUserEntity> {
