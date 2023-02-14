@@ -11,7 +11,7 @@ import { hash } from 'bcrypt';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async create(createUserDto: CreateUserDto): Promise<Omit<IUserEntity,"password">> {
+  async create(createUserDto: CreateUserDto): Promise<IUserEntity> {
     const user = createUserDto;
     const hashedPassword = await hash(user.password, 10);
     user.password = hashedPassword;
@@ -21,24 +21,24 @@ export class UserService {
     return createdUser;
   }
 
-  async findAll(): Promise<Omit<IUserEntity[],"password">> {
+  async findAll(): Promise<IUserEntity[]> {
     const users = await this.userRepository.findAllUsers();
     users.map((user) => delete user.password);
     return users;
   }
 
-  async findOne(userId: string): Promise<Omit<IUserEntity,"password">> {
+  async findOne(userId: string): Promise<IUserEntity> {
     const foundUser = await this.userRepository.findUserById(userId);
     delete foundUser.password;
     return foundUser;
   }
 
-  async findUserByEmail(userEmail: string): Promise<Omit<IUserEntity,"password">> {
+  async findUserByEmail(userEmail: string): Promise<IUserEntity> {
     const user = await this.userRepository.findUserByEmail(userEmail);
     return user;
   }
 
-  async update(updateUserDto: UpdateUserDto): Promise<Omit<IUserEntity,"password">> {
+  async update(updateUserDto: UpdateUserDto): Promise<IUserEntity> {
     if (updateUserDto.password) {
       const hashedPassword = await hash(updateUserDto.password, 10);
       updateUserDto.password = hashedPassword;
