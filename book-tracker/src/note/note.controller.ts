@@ -45,9 +45,10 @@ export class NoteController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Post()
-  async createNote(@Body() note: CreateNoteDto): Promise<INote> {
+  async createNote(@userLogged() userLogged: IUserEntity,
+    @Body() note: Omit<CreateNoteDto, "userId">): Promise<INote> {
     try {
-      return await this.service.createNote(note);
+      return await this.service.createNote({...note, userId: userLogged.id});
     } catch (error) {
       throw new BadRequestException('It was not possible to add the note');
     }

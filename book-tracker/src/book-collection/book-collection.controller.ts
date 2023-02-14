@@ -31,11 +31,11 @@ export class BookCollectionController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Post()
-  async create(
-    @Body() createBookCollectionDto: CreateBookCollectionDto,
+  async create(@userLogged() userLogged: IUserEntity,
+    @Body() createBookCollectionDto: Omit<CreateBookCollectionDto, "userId">,
   ): Promise<IBookCollection> {
     try {
-      return await this.bookCollectionService.create(createBookCollectionDto);
+      return await this.bookCollectionService.create({...createBookCollectionDto, userId: userLogged.id});
     } catch (error) {
       HandleException(error);
     }

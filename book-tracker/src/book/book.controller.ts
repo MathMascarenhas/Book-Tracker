@@ -23,12 +23,13 @@ import { userLogged } from 'src/auth/decorators/user-logged.decorator';
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Post()
-  async create(@Body() createBookDto: CreateBookDto) {
+  async create(@Body() createBookDto: Omit<CreateBookDto,"userId">,
+  @userLogged() userLogged: IUserEntity) {
     try {
-      return await this.bookService.create(createBookDto);
+      return await this.bookService.create({...createBookDto, userId: userLogged.id});
     } catch (error) {
       HandleException(error);
     }
@@ -56,7 +57,7 @@ export class BookController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Patch(':id')
   async update(
@@ -71,7 +72,7 @@ export class BookController {
     }
   }
 
-  @UseGuards(AuthGuard(), IsAdminAuthorization)
+  @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Delete(':id')
   async remove(@Param('id') bookId: string) {
