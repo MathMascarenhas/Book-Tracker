@@ -23,7 +23,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<IUserEntity> {
+  async create(@Body() createUserDto: CreateUserDto): Promise<Omit<IUserEntity,"password">> {
     try {
       return await this.userService.create(createUserDto);
     } catch (err) {
@@ -34,7 +34,7 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Get()
-  async findAll(): Promise<IUserEntity[]> {
+  async findAll(): Promise<Omit<IUserEntity[],"password">> {
     try {
       return await this.userService.findAll();
     } catch (err) {
@@ -45,7 +45,7 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<IUserEntity> {
+  async findOne(@Param('id') id: string): Promise<Omit<IUserEntity,"password">> {
     try {
       return await this.userService.findOne(id);
     } catch (err) {
@@ -59,7 +59,7 @@ export class UserController {
   async update(
     @Param('id') userId: string,
     @Body() updateUser: UpdateUserDto,
-  ): Promise<IUserEntity> {
+  ): Promise<Omit<IUserEntity,"password">> {
     try {
       const userData = { ...updateUser, id: userId };
       return await this.userService.update(userData);
