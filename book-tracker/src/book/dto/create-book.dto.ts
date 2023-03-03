@@ -16,6 +16,11 @@ export class CreateBookDto {
   author: string;
 
   @ApiProperty()
+  @IsString()
+  imageUrl: string;
+
+
+  @ApiProperty()
   @IsNumber()
   pages: number;
 

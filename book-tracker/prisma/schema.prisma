@@ -39,6 +39,7 @@ model Book {
   userId  String
   title String @unique
   description String
+  imageUrl String
   author String
   pages Int
   rate Decimal
